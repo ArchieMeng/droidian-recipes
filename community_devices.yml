@@ -1,7 +1,7 @@
 .pdx206_packages:
   packages: &pdx206_packages
-    - adaptation-pdx206
-    - adaptation-pdx206-configs
+    - adaptation-sony-pdx206
+    - adaptation-sony-pdx206-configs
 
 pdx206-phosh:
   type: image

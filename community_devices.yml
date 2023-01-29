@@ -1,0 +1,12 @@
+.pdx206_packages:
+  packages: &pdx206_packages
+    - adaptation-pdx206
+    - adaptation-pdx206-configs
+
+pdx206-phosh:
+  type: image
+  arch: arm64
+  edition: phosh
+  variant: phone
+  apilevel: 30
+  packages: *pdx206_packages

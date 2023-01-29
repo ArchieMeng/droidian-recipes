@@ -1,5 +1,6 @@
 [submodule "rootfs-templates"]
 	path = rootfs-templates
+	branch = bookworm
 	url = https://github.com/PeterCxy/rootfs-templates
 [submodule "android-recovery-flashing-template"]
 	path = android-recovery-flashing-template

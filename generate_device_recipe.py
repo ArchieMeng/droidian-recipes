@@ -38,6 +38,7 @@ TEMPLATE = """
 {{- $image := or .image (printf "droidian-%%s-%%s-%%s-%%s-api%%d-%%s-%%s_%%s.zip" $mtype $edition $variant $product $apilevel $architecture $version $suffix) -}}
 {{- $output_type := or .output_type "%(output_type)s" -}}
 {{- $use_internal_repository := or .use_internal_repository "%(use_internal_repository)s" -}}
+{{- $droidian_version := or .droidian_version "%(version)s" -}}
 
 architecture: {{ $architecture }}
 actions:
@@ -49,11 +50,11 @@ actions:
 """
 
 TEMPLATE_ONLY_STABLE = """
-{{ if ne $version "nightly" }}
+{{ if ne $version "next" }}
 """
 
 TEMPLATE_ONLY_NIGHTLY = """
-{{ if eq $version "nightly" }}
+{{ if eq $version "next" }}
 """
 
 TEMPLATE_END = """
@@ -74,6 +75,7 @@ TEMPLATE_ENTRYPOINT = """
       image: {{ $image }}
       output_type: {{ $output_type }}
       use_internal_repository: {{ $use_internal_repository }}
+      droidian_version: {{ $droidian_version }}
 """
 
 TEMPLATE_BUNDLE = """
@@ -146,7 +148,7 @@ def generate_recipe_for_product(contents, product, arch, edition, variant, apile
 		"variant" : variant,
 		"apilevel" : int(apilevel),
 		"mtype" : "OFFICIAL" if not IS_COMMUNITY_PORT else "UNOFFICIAL",
-		"version" : os.environ.get("DROIDIAN_VERSION", "nightly"),
+		"version" : os.environ.get("DROIDIAN_VERSION", "next"),
 		"suffix" : datetime.datetime.utcnow().strftime("%Y%m%d"),
 		"output_type" : config["type"],
 		"use_internal_repository" : "yes" if config.get("use_internal_repository", False) else "no",

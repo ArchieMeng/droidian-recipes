@@ -1,8 +1,15 @@
+# Packages
 .pdx206_packages:
   packages: &pdx206_packages
     - adaptation-sony-pdx206
     - adaptation-sony-pdx206-configs
 
+.rtwo_packages:
+  packages: &rtwo_packages
+    - adaptation-moto-rtwo
+    - adaptation-moto-rtwo-configs
+
+# Devices
 pdx206-phosh:
   type: image
   arch: arm64
@@ -10,3 +17,11 @@ pdx206-phosh:
   variant: phone
   apilevel: 30
   packages: *pdx206_packages
+
+rtwo-phosh:
+  type: image
+  arch: arm64
+  edition: phosh
+  variant: phone
+  apilevel: 33
+  packages: *rtwo_packages

@@ -81,8 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Create GitHub release
     needs: build
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}${{ steps.create_nightly.outputs.upload_url }}
 
     steps:
       - name: Checkout
@@ -105,7 +103,6 @@ jobs:
         run: |
           gh release delete nightly --yes | true
           git push --delete origin refs/tags/nightly || true
-          gh release create nightly
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -120,26 +117,6 @@ jobs:
             sha256sum * >> ../SHA256SUMS
             cd ..
           done
-
-      - name: Create stable release (drafted)
-        id: create_release
-        if: startsWith(github.ref, 'refs/tags/droidian')
-        uses: softprops/action-gh-release@v2.2.2
-        with:
-          files: droidian-out/SHA256SUMS
-          tag_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-
-      - name: Create nightly release
-        id: create_nightly
-        if: startsWith(github.ref, 'refs/tags/droidian') != true
-        uses: softprops/action-gh-release@v2.2.2
-        with:
-          files: droidian-out/SHA256SUMS
-          tag_name: nightly
-          draft: false
-          prerelease: true
 
   publish:
     runs-on: ubuntu-latest
@@ -160,6 +137,13 @@ jobs:
         with:
           name: droidian-out-${{ matrix.config.product }}-${{ matrix.config.arch }}-${{ matrix.config.edition }}-${{ matrix.config.variant }}-${{ matrix.config.apilevel }}
           path: droidian-out
+
+      - name: Create SHA256SUMS
+        run: |
+          cd droidian-out
+          for x in ./*; do
+            sha256sum $x >> ./SHA256SUMS
+          done
 
       - name: Create stable release (drafted)
         id: create_release
